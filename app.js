@@ -25,10 +25,7 @@ function callName(req, res) {
     //    and arguments for the script  
       
     // E.g : http://localhost:3000/name?firstname=Mike&lastname=Will 
-    // so, first name = Mike and last name = Will 
-    var process = spawn('python',["./hello.py", 
-                            req.query.firstname, 
-                            req.query.lastname] ); 
+    var process = spawn('python',['./score.py', req.query.val1, req.query.val2]); 
   
     // Takes stdout data from script which executed 
     // with arguments and send this data to res object 
