@@ -6,14 +6,7 @@ var port = 3005;
   
 // Function callName() is executed whenever  
 // url is of the form localhost:3000/name 
-app.get('/name', callName); 
-
-// app.get('/name', function(req, res) {
-//     console.log(req.query);
-
-//     res.send('Hello'); 
-//   });
-  
+app.get('/score', callName); 
   
 function callName(req, res) { 
       console.log(req.query);
@@ -24,7 +17,7 @@ function callName(req, res) {
     // 2. list containing Path of the script 
     //    and arguments for the script  
       
-    // E.g : http://localhost:3000/name?firstname=Mike&lastname=Will 
+    // E.g : http://localhost:3005/score?val1=Mike&val2=Will 
     var process = spawn('python',['./score.py', req.query.val1, req.query.val2]); 
   
     // Takes stdout data from script which executed 
