@@ -1,0 +1,14 @@
+{
+  "name": "npm_python",
+  "version": "1.0.0",
+  "description": "Run python in nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "---"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
