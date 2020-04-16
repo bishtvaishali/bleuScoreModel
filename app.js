@@ -2,29 +2,43 @@
 var express = require('express'); 
 var app = express(); 
 var port = 3005;
+var bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
   
 // Function callName() is executed whenever  
 // url is of the form localhost:3000/name 
-app.get('/score', callName); 
+app.post('/score', callName); 
   
 function callName(req, res) { 
-      console.log(req.query);
+    console.log('body', req.body);
+    //   console.log(req.query);
     var spawn = require("child_process").spawn; 
       
     // Parameters passed in spawn - 
     // 1. type_of_script 
     // 2. list containing Path of the script 
     //    and arguments for the script  
-      
-    // E.g : http://localhost:3005/score?val1=Mike&val2=Will 
-    var process = spawn('python',['./score.py', req.query.val1, req.query.val2]); 
+    var py = spawn('python',['./score.py', JSON.stringify(req.body)]); 
+    let result = '';
   
     // Takes stdout data from script which executed 
     // with arguments and send this data to res object 
-    process.stdout.on('data', function(data) { 
-        res.send(data); 
-    } ) 
+    py.stdout.on('data', function(data) { 
+        result += data.toString();
+    })
+    
+    /*Once the stream is done (on 'end') we want to simply log the received data to the console.*/
+    py.stdout.on('end', function(){
+        console.log('score: ',result);
+        res.send(result);
+    });
+
+   
+    py.on('close', (code) => {
+        console.log(`child process close all stdio with code ${code}`);
+    });
 } 
 
 app.listen(port, function() { 

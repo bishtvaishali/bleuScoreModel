@@ -1,28 +1,40 @@
 
-import sys
+import sys, json 
 from nltk.translate.bleu_score import sentence_bleu
 
-# print("Output from Python") 
-sentence1 = sys.argv[1]
-sentence2 = sys.argv[2]
-sentence1 = sentence1.split(' ')
-sentence2 = sentence2.split(' ')
+data = sys.argv[1]
 
-# score = sentence_bleu(reference, sentence2)
-reference = [sentence1]
-candidate = sentence2
-score = sentence_bleu(reference, candidate)
+data = json.loads(data)
+sentence = data['sentence']
+reference = data['reference']
 
-onegram = sentence_bleu(reference, candidate, weights=(1, 0, 0, 0))
-twogram = sentence_bleu(reference, candidate, weights=(0.5, 0.5, 0, 0))
-threegram = sentence_bleu(reference, candidate, weights=(0.33, 0.33, 0.33, 0))
-fourgram = sentence_bleu(reference, candidate, weights=(0.25, 0.25, 0.25, 0.25))
+# print("Body json->", data)
+# print ("reference->", reference) 
+# print ("sentence->", sentence)
+
+candidate = sentence.split(' ') 
+# print('candidate: ', candidate)
+
+referenceList = []
+for i in range(len(reference)): 
+    arr = reference[i].split(' ') 
+    referenceList.append(arr)
+# print('refernceList-> ', referenceList)
+
+
+score = sentence_bleu(referenceList, sentence)
+
+onegram = sentence_bleu(referenceList, candidate, weights=(1, 0, 0, 0))
+twogram = sentence_bleu(referenceList, candidate, weights=(0.5, 0.5, 0, 0))
+threegram = sentence_bleu(referenceList, candidate, weights=(0.33, 0.33, 0.33, 0))
+fourgram = sentence_bleu(referenceList, candidate, weights=(0.25, 0.25, 0.25, 0.25))
 avg = (onegram + twogram + threegram + fourgram)/4
+print(avg)
 
-print(score)
-print('Cumulative 1-gram: %f' % sentence_bleu(reference, candidate, weights=(1, 0, 0, 0)))
-print('Cumulative 2-gram: %f' % sentence_bleu(reference, candidate, weights=(0.5, 0.5, 0, 0)))
-print('Cumulative 3-gram: %f' % sentence_bleu(reference, candidate, weights=(0.33, 0.33, 0.33, 0)))
-print('Cumulative 4-gram: %f' % sentence_bleu(reference, candidate, weights=(0.25, 0.25, 0.25, 0.25)))
-print('Average: %f' % avg)
+# print('Average: %f' % avg)
+# print('score: ', score)
+# print('Cumulative 1-gram: %f' % onegram)
+# print('Cumulative 2-gram: %f' % twogram)
+# print('Cumulative 3-gram: %f' % threegram)
+# print('Cumulative 4-gram: %f' % fourgram)
 
