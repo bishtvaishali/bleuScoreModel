@@ -6,6 +6,9 @@ var bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.get('/', function(req,res){
+    res.send('Welcome to BLEU Score server');
+})
   
 app.post('/score', calculateScore); 
   
@@ -33,7 +36,6 @@ function calculateScore(req, res) {
         res.send(result);
     });
 
-   
     py.on('close', (code) => {
         console.log(`child process close all stdio with code ${code}`);
     });
