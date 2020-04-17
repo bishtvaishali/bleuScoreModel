@@ -7,13 +7,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
   
-// Function callName() is executed whenever  
-// url is of the form localhost:3000/name 
-app.post('/score', callName); 
+app.post('/score', calculateScore); 
   
-function callName(req, res) { 
-    console.log('body', req.body);
-    //   console.log(req.query);
+function calculateScore(req, res) { 
+    // console.log('body', req.body);
+
     var spawn = require("child_process").spawn; 
       
     // Parameters passed in spawn - 
@@ -29,7 +27,7 @@ function callName(req, res) {
         result += data.toString();
     })
     
-    /*Once the stream is done (on 'end') we want to simply log the received data to the console.*/
+    /*Once the stream is done (on 'end') log the received data to the console.*/
     py.stdout.on('end', function(){
         console.log('score: ',result);
         res.send(result);
