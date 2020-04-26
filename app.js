@@ -17,20 +17,14 @@ function calculateScore(req, res) {
 
     var spawn = require("child_process").spawn; 
       
-    // Parameters passed in spawn - 
-    // 1. type_of_script 
-    // 2. list containing Path of the script 
-    //    and arguments for the script  
+    //parameters required in the spawn - type of script, args of script
     var py = spawn('python',['./score.py', JSON.stringify(req.body)]); 
     let result = '';
   
-    // Takes stdout data from script which executed 
-    // with arguments and send this data to res object 
     py.stdout.on('data', function(data) { 
         result += data.toString();
     })
-    
-    /*Once the stream is done (on 'end') log the received data to the console.*/
+
     py.stdout.on('end', function(){
         console.log('score: ',result);
         res.send(result);
